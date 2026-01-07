@@ -1,4 +1,5 @@
-pandas
-tqdm
-networkx
 openai
+psycopg2-binary
+sqlalchemy
+redis
+requests
