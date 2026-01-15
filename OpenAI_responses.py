@@ -62,64 +62,32 @@ def process_message(user_message: str, conversation_id: str = None) -> dict:
         }
 
 
-# === SIMULATED MULTI-TURN CONVERSATION FOR USE CASE 5 ===
+# === INTERACTIVE MULTI-TURN CONVERSATION ===
 if __name__ == "__main__":
+    print("\n" + "="*80)
+    print("🛍️  OPENAI SHOPPING ASSISTANT - Multi-Turn Chat")
+    print("="*80)
+    print("Ask shopping questions and get web search results.")
+    print("Type 'exit', 'quit', 'bye', or 'goodbye' to end the conversation.\n")
+
     conversation_id = None
+    turn = 0
 
-    # Turn 1: Shopping search - Model auto-invokes web_search for laptops 
-    print("\n First use case example:\n")
-    print("User: Find noise-canceling headphones under $200?\n")
-    result = process_message("Find noise-canceling headphones under $200?", conversation_id)
-    print("Assistant:", result["response"])
-    conversation_id = result["conversation_id"]
-    print("\n(Conversation ID from turn 1:", conversation_id, ")")
-    print("\n" + "="*80 + "\n")
-
-    # Turn 2: Shopping search - Model auto-invokes web_search for current laptops
-    print("User: Which one is best for travel?.\n")
-    result = process_message("Which one is best for travel?.", conversation_id)
-    print("Assistant:", result["response"])
-    conversation_id = result["conversation_id"]
-    print("\n(Conversation ID from turn 2:", conversation_id, ")")
-    print("\n" + "="*80 + "\n")
-
-    # Turn 1: Simpler implementation without helper function
-    print("\n Simpler implementation - First use case example:\n")
-    response = client.responses.create(
-        model="gpt-4.1-mini",
-        input=[
-            {
-                "role": "system",
-                "content": (
-                    "You are a shopping assistant. "
-                    "When asked about products, return a short list with: "
-                    "name, price range, merchant link, and image URL."
-                )
-            },
-            {
-                "role": "user",
-                "content": "Find noise-canceling headphones under $200"
-            }
-        ]
-    )
-
-    print("Assistant reply:\n")
-    print(response.output_text)
-
-    # Save conversation state
-    previous_response_id = response.id
-
-    # ---- Turn 2: Follow-up question (multi-turn) ----
-    follow_up = client.responses.create(
-        model="gpt-4.1-mini",
-        previous_response_id=previous_response_id,
-        input=[
-            {
-                "role": "user",
-                "content": "Which one is best for travel?"
-            }
-        ]
-    )
-
-    print("\nFollow-up reply:\n")
-    print(follow_up.output_text)
+    while True:
+        turn += 1
+        user_input = input(f"You (Turn {turn}): ").strip()
+        
+        if not user_input:
+            print("⚠️  Please enter a question.\n")
+            continue
+        
+        if user_input.lower() in ['exit', 'quit', 'bye', 'goodbye']:
+            print("\n👋 Thanks for using OpenAI Shopping Assistant! Goodbye!")
+            break
+        
+        print(f"\n⏳ Processing your request...")
+        result = process_message(user_input, conversation_id)
+        
+        print(f"\n🤖 Assistant:\n{result['response']}")
+        conversation_id = result["conversation_id"]
+        print(f"\n{'─'*80}\n")

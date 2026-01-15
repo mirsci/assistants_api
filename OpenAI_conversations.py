@@ -13,7 +13,6 @@ client = openai.OpenAI(api_key=openai_key)
 system_prompt = """
 You are a helpful back-to-school shopping assistant for college students.
 - Provide practical study tips when asked.
-- For product recommendations (e.g., laptops), search the web for current real-time prices, direct merchant links (e.g., Amazon, Best Buy, Walmart, Lenovo, HP, Dell), product images, and specifications.
 - Focus on laptops under $800 suitable for students.
 - Prioritize lightweight models with good battery life when specified.
 - Include direct product links, current prices, key specs, and image URLs (use Markdown for formatting: bold names, links, ![alt](image_url)).
@@ -21,6 +20,7 @@ You are a helpful back-to-school shopping assistant for college students.
 - Be conversational, encouraging, and cite sources when possible.
 - Always use the web_search tool for up-to-date shopping information.
 """
+# - For product recommendations (e.g., laptops), search the web for current real-time prices, direct merchant links (e.g., Amazon, Best Buy, Walmart, Lenovo, HP, Dell), product images, and specifications.
 
 def create_or_get_conversation(conversation_id: str = None) -> str:
     """Create a new conversation or retrieve an existing one."""
@@ -107,7 +107,7 @@ if __name__ == "__main__":
     first_user_msg = {
             "type": "message",
             "role": "user",
-            "content": "Find noise-canceling headphones under $200"
+            "content": "I live in a remote area with frequent energy fluctuations. I want to buy laptop with UPS to protect from dirty electricity. Provide recommendations"
     }
    
     # ---------------------------------------
@@ -120,7 +120,7 @@ if __name__ == "__main__":
                 "type": "message",
                 "role": "user",
                 "content": [
-                    {"type": "input_text", "text": "Find noise-canceling headphones under $200"}
+                    {"type": "input_text", "text": "I live in a remote area with frequent energy fluctuations. I want to buy laptop with UPS to protect from dirty electricity. Provide recommendations"}
                 ]
             }
         ]
@@ -130,7 +130,7 @@ if __name__ == "__main__":
     # ---------------------------------------
     response_1 = client.responses.create(
         model="gpt-4.1-mini",
-        input=[{"role": "user", "content": "Find noise-canceling headphones under $200"}],
+        input=[{"role": "user", "content": "I live in a remote area with frequent energy fluctuations. I want to buy laptop with UPS to protect from dirty electricity. Provide recommendations"}],
         conversation=conv_id
     )
 
@@ -162,7 +162,7 @@ if __name__ == "__main__":
                 "type": "message",
                 "role": "user",
                 "content": [
-                    {"type": "input_text", "text": "Which one is best for travel?"}
+                    {"type": "input_text", "text": "Help me make a decision, synthesize these findings"}
                 ]
             }
         ]
@@ -174,7 +174,7 @@ if __name__ == "__main__":
     # ---------------------------------------
     response_2 = client.responses.create(
         model="gpt-4.1-mini",
-        input=[{"role": "user", "content": "Which one is best for travel?"}],
+        input=[{"role": "user", "content": "Help me make a decision, synthesize these findings"}],
         conversation=conv_id
     )
 
