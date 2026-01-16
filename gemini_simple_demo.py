@@ -27,6 +27,21 @@ def print_products(products):
             if p.get('rating'):
                 print(f"    Rating: {p['rating']} ⭐")
 
+def print_token_and_cost_info(response):
+    """Helper function to print token usage and cost information"""
+    if "tokens" in response:
+        tokens = response["tokens"]
+        print(f"\n📊 Token Usage (this turn):")
+        print(f"  Input:  {tokens['input']} tokens")
+        print(f"  Output: {tokens['output']} tokens")
+        print(f"  Total:  {tokens['total']} tokens")
+    
+    if "cost" in response:
+        cost = response["cost"]
+        print(f"\n💰 Cost Information:")
+        print(f"  This turn: ${cost['this_turn']:.6f}")
+        print(f"  Conversation total: ${cost['conversation_total']:.6f}")
+
 def main():
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
@@ -51,7 +66,23 @@ def main():
             print("⚠️  Please enter a question.\n")
             continue
         
-        if question.lower() in ['exit', 'quit', 'bye', 'goodbye']:
+        if question.lower() in ['exit', 'quit', 'bye', 'goodbye', 'stats', 'summary']:
+            if question.lower() in ['stats', 'summary']:
+                # Show conversation summary before exiting
+                stats = assistant.get_conversation_stats(conv_id)
+                print("\n" + "="*60)
+                print("📈 CONVERSATION SUMMARY")
+                print("="*60)
+                print(f"Total turns: {stats['turns']}")
+                print(f"Total messages: {stats['message_count']}")
+                print(f"\n📊 Token Usage (entire conversation):")
+                print(f"  Input:  {stats['tokens']['input']} tokens")
+                print(f"  Output: {stats['tokens']['output']} tokens")
+                print(f"  Total:  {stats['tokens']['total']} tokens")
+                print(f"\n💰 Cost Information:")
+                print(f"  Model: {stats['cost']['model']}")
+                print(f"  Total cost: ${stats['cost']['total_usd']:.6f}")
+                print("="*60)
             print("\n👋 Thanks for using Gemini Shopping Assistant! Goodbye!")
             break
         
@@ -65,6 +96,7 @@ def main():
             continue
         
         print_products(response.get("products", []))
+        print_token_and_cost_info(response)
         print(f"\n{'─'*60}\n")
 
 if __name__ == "__main__":

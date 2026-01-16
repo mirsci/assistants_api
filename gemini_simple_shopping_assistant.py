@@ -28,6 +28,8 @@ try:
 except ImportError:
     raise ImportError("Please install google-genai: pip install google-genai")
 
+from token_cost_tracker import TokenCostTracker
+
 class SimpleGeminiShoppingAssistant:
     def __init__(self, api_key: Optional[str] = None, model: str = "models/gemini-2.0-flash", temperature: float = 0.7, max_tokens: int = 2048):
         self.api_key = api_key or os.getenv("GEMINI_API_KEY")
@@ -40,6 +42,8 @@ class SimpleGeminiShoppingAssistant:
         self.max_tokens = max_tokens
 
         self.conversations: Dict[str, List[Dict[str, Any]]] = {}
+        self.cost_tracker = TokenCostTracker("gemini")  # Use centralized token/cost tracker
+        
         self.system_prompt = (
             "You are a helpful shopping assistant. "
             "Recommend products with name, price, link, and image. "
@@ -50,6 +54,7 @@ class SimpleGeminiShoppingAssistant:
     def start_conversation(self, user_id: str) -> str:
         conv_id = str(uuid.uuid4())
         self.conversations[conv_id] = []
+        self.cost_tracker.start_conversation(conv_id, self.model)
         return conv_id
 
     def ask(self, question: str, conversation_id: str) -> Dict[str, Any]:
@@ -87,12 +92,23 @@ class SimpleGeminiShoppingAssistant:
                     config=config_params
                 )
                 text = response.text
+                
+                # Extract token usage from response
+                input_tokens = response.usage_metadata.prompt_token_count
+                output_tokens = response.usage_metadata.candidates_token_count
+                
+                # Track tokens and calculate cost using TokenCostTracker
+                cost = self.cost_tracker.add_tokens(conversation_id, input_tokens, output_tokens)
+                
                 # Add assistant message
                 history.append({"role": "model", "content": text, "timestamp": datetime.utcnow().isoformat()})
                 products = self._extract_products(text)
 
                 # Assuming response with grounding metadata
                 text_with_citations = self.add_citations(response)
+                
+                # Get current conversation stats from tracker
+                stats = self.cost_tracker.get_stats(conversation_id)
                
                 return {
                     "conversation_id": conversation_id,
@@ -100,7 +116,16 @@ class SimpleGeminiShoppingAssistant:
                     "products": products,
                     "citations": text_with_citations, 
                     "message_count": len(history),
-                    "timestamp": datetime.utcnow().isoformat()
+                    "timestamp": datetime.utcnow().isoformat(),
+                    "tokens": {
+                        "input": input_tokens,
+                        "output": output_tokens,
+                        "total": input_tokens + output_tokens
+                    },
+                    "cost": {
+                        "this_turn": cost,
+                        "conversation_total": stats["cost"]["total_usd"]
+                    }
                 }
             except Exception as e:
                 error_msg = str(e)
@@ -115,6 +140,33 @@ class SimpleGeminiShoppingAssistant:
 
     def get_conversation_history(self, conversation_id: str) -> List[Dict[str, Any]]:
         return self.conversations.get(conversation_id, [])
+
+    def get_token_usage(self, conversation_id: str) -> Dict[str, int]:
+        """Get token usage for a conversation."""
+        stats = self.cost_tracker.get_stats(conversation_id)
+        return stats["tokens"]
+
+    def get_conversation_cost(self, conversation_id: str) -> float:
+        """Get total cost for a conversation in USD."""
+        stats = self.cost_tracker.get_stats(conversation_id)
+        return stats["cost"]["total_usd"]
+
+    def get_conversation_stats(self, conversation_id: str) -> Dict[str, Any]:
+        """Get comprehensive statistics for a conversation."""
+        tracker_stats = self.cost_tracker.get_stats(conversation_id)
+        history = self.conversations.get(conversation_id, [])
+        
+        return {
+            "conversation_id": conversation_id,
+            "tokens": tracker_stats["tokens"],
+            "cost": {
+                "total_usd": tracker_stats["cost"]["total_usd"],
+                "total_cents": tracker_stats["cost"]["total_cents"],
+                "model": tracker_stats["model"]
+            },
+            "turns": tracker_stats["turns"],
+            "message_count": len(history)
+        }
 
     def _extract_products(self, text: str) -> List[Dict[str, Any]]:
         # Very simple parser for PRODUCT blocks
