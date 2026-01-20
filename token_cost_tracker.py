@@ -48,13 +48,23 @@ GEMINI_PRICING = {
     }
 }
 
-# Tool usage costs (estimation)
+# Tool usage costs (by provider and model)
+# Note: Free tier includes web search at no cost
+# Pricing below is for paid/commercial tier usage
 TOOL_COSTS = {
     "openai": {
-        "web_search": 0.0,  # Included in OpenAI Responses API
+        "gpt-5.2": {"web_search": 0.010},           # Premium model, higher cost
+        "gpt-4o": {"web_search": 0.008},            # Advanced model
+        "gpt-4-turbo": {"web_search": 0.008},       # Advanced model
+        "gpt-3.5-turbo": {"web_search": 0.005},     # Standard model
+        "gpt-4.1-mini": {"web_search": 0.003},      # Budget model
+        "default": {"web_search": 0.005},           # Fallback for unknown models
     },
     "gemini": {
-        "web_search": 0.0,  # Included in Gemini API
+        "models/gemini-2.0-flash": {"web_search": 0.002},      # Latest fast model
+        "models/gemini-1.5-pro": {"web_search": 0.003},        # Premium model
+        "models/gemini-1.5-flash": {"web_search": 0.002},      # Fast model
+        "default": {"web_search": 0.001},                       # Fallback for unknown models
     }
 }
 
@@ -135,11 +145,19 @@ class TokenCostTracker:
         output_cost = output_tokens * pricing["output"]
         token_cost = input_cost + output_cost
         
-        # Add tool cost if applicable
+        # Add tool cost if applicable (model-specific pricing)
         tool_cost = 0.0
         if tool_name:
-            tool_cost_dict = TOOL_COSTS.get(self.provider, {})
-            tool_cost = tool_cost_dict.get(tool_name, 0.0)
+            provider_tools = TOOL_COSTS.get(self.provider, {})
+            
+            # Try to get model-specific tool cost, fallback to default
+            model_tools = provider_tools.get(model, {})
+            if tool_name in model_tools:
+                tool_cost = model_tools[tool_name]
+            else:
+                # Fallback to default tool cost for this provider
+                default_tools = provider_tools.get("default", {})
+                tool_cost = default_tools.get(tool_name, 0.0)
             
             # Track tool usage
             if tool_name not in conv["tool_usage"]:

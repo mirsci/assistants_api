@@ -21,6 +21,7 @@ import random
 from typing import Dict, Any, Optional, List
 from datetime import datetime
 import re
+import traceback
 
 try:
     from google import genai
@@ -127,8 +128,9 @@ class SimpleGeminiShoppingAssistant:
                         "conversation_total": stats["cost"]["total_usd"]
                     }
                 }
-            except Exception as e:
+            except Exception as e:                
                 error_msg = str(e)
+                traceback.print_exc()
                 # Check if it's a rate limit error (429 or RESOURCE_EXHAUSTED)
                 if ("429" in error_msg or "RESOURCE_EXHAUSTED" in error_msg) and attempt < max_retries - 1:
                     wait_time = base_wait_time * (2 ** attempt) + random.uniform(0, 5)  # Exponential backoff + jitter
@@ -165,6 +167,7 @@ class SimpleGeminiShoppingAssistant:
                 "model": tracker_stats["model"]
             },
             "turns": tracker_stats["turns"],
+            "tool_usage": tracker_stats["tool_usage"],
             "message_count": len(history)
         }
 
@@ -202,6 +205,9 @@ class SimpleGeminiShoppingAssistant:
         chunks = response.candidates[0].grounding_metadata.grounding_chunks
 
         # Sort supports by end_index in descending order to avoid shifting issues when inserting.
+        if supports is None:
+            return text
+        
         sorted_supports = sorted(supports, key=lambda s: s.segment.end_index, reverse=True)
 
         for support in sorted_supports:

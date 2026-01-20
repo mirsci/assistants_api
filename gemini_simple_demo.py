@@ -79,6 +79,8 @@ def main():
                 print(f"  Input:  {stats['tokens']['input']} tokens")
                 print(f"  Output: {stats['tokens']['output']} tokens")
                 print(f"  Total:  {stats['tokens']['total']} tokens")
+                print(f"\n📊 Tool Usage (entire conversation):")
+                print(f"  Web Search: {stats['tool_usage'].get('web_search', 0)} queries")
                 print(f"\n💰 Cost Information:")
                 print(f"  Model: {stats['cost']['model']}")
                 print(f"  Total cost: ${stats['cost']['total_usd']:.6f}")
