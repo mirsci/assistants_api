@@ -99,7 +99,7 @@ class SimpleGeminiShoppingAssistant:
                 output_tokens = response.usage_metadata.candidates_token_count
                 
                 # Track tokens and calculate cost using TokenCostTracker
-                cost = self.cost_tracker.add_tokens(conversation_id, input_tokens, output_tokens)
+                cost = self.cost_tracker.add_tokens(conversation_id, input_tokens, output_tokens, "web_search")
                 
                 # Add assistant message
                 history.append({"role": "model", "content": text, "timestamp": datetime.utcnow().isoformat()})

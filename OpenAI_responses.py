@@ -72,7 +72,7 @@ def process_message(user_message: str, conversation_id: str = None, previous_res
         "instructions": system_prompt, 
         "tools": tools,
         "tool_choice": "auto",  # Model decides when to use web_search
-        "store": True  # Enables stateful multi-turn conversations
+        "store": True  # Enables stateful multi-turn conversations, stores by default in dashboard for 30 days
     }
 
     if previous_response_id:
@@ -96,15 +96,17 @@ def process_message(user_message: str, conversation_id: str = None, previous_res
        
         # Primary way to access the final synthesized text (includes citations from web_search)
         response_text = response.output_text
-        
-        # Count tokens using tiktoken for accurate token counting
-        input_tokens = count_tokens(input_text)
-        output_tokens = count_tokens(response_text)
+        input_tokens = response.usage.input_tokens 
+        output_tokens = response.usage.output_tokens 
+
+        # # Count tokens using tiktoken for accurate token counting
+        # input_tokens = count_tokens(input_text)
+        # output_tokens = count_tokens(response_text)
         
         # Track tokens and cost (always track, even if estimated)
         cost = 0.0
         if input_tokens > 0 or output_tokens > 0:
-            cost = cost_tracker.add_tokens( conversation_id, input_tokens, output_tokens)
+            cost = cost_tracker.add_tokens( conversation_id, input_tokens, output_tokens, "web_search")
         
         # Get stats for response
         stats = cost_tracker.get_stats(conversation_id)
@@ -145,7 +147,7 @@ if __name__ == "__main__":
 
     while True:
         turn += 1
-        conversation_id = 1
+        conversation_id = "conv_openai_demo_9568978210993"  # Fixed conversation ID for demo purposes
         user_input = input(f"You (Turn {turn}): ").strip()
         
         if not user_input:
