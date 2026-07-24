@@ -13,8 +13,10 @@ Took 3 real product categories, with 7 real products each from Shopify product d
 Here are few examples using specs and recordings for product discovery task: 
 	1) Apparel specs, with user personas is included in "hidden facts"
 	
-	2) Apparel recording/ transcript based on script 
 	
+	2) Apparel recording/ transcript based on script 
+	<img width="1555" height="802" alt="image" src="https://github.com/user-attachments/assets/841bad43-0026-4281-ba24-c1d961421237" />
+
 	3) Summary of specs coverage
 	4) Summary of regression results
 
