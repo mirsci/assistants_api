@@ -1,3 +1,5 @@
+Here I am outlining briefly, certain aspects of LLM lifecycle, with focus on data synthesis and model evals.
+Note: generating training data becomes possible, after baselining. 
 
 Key point: it is critical we master this basic methodology as a team, to develop it together with Oumi.
 
@@ -7,7 +9,6 @@ A) I built spec based data synthesis in an AI-enabled way, as an extension to De
 Note: Oumi has similar support for data synthesis, few details below. 
 
 The task was product discovery. Turns out that Gemma 4 E4B is very good at it, already. 
-
 Took 3 real product categories, with 7 real products each from Shopify product data set. 
 
 Here are few examples using specs and recordings for product discovery task: 
