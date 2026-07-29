@@ -1,3 +1,30 @@
+1) Design lifecycle: inference engines selection criteria considerations:
+		1 — Model Format Compatibility; (GGUF / QAT-GGUF native support)
+		2 — iOS Platform Integration (Device compatibility, App store compliance, Background execution support) 
+		3 — Hardware Backend & Acceleration (Metal GPU acceleration, ANE access)
+		4 — Memory Management (Peak RAM footprint, KV cache quantization)
+		5 — KV Cache Economics (KV cache stateful persistence, session save / restore, session cloning, KV cache compression, context window management)
+		6 — Token Scheduling & Inference Control (Token-level scheduling, Context window size, Time to first token (TTFT))
+		7 — OpenAI-Compatible API & Transport
+		8 — Resource & Power Management (Thermal state management, battery efficiency, Inference cancellation etc.)
+		9 — Model Lifecycle & Distribution
+	Bank has design decisioning lifecycle => Oumi's proposed designs needs to align with this process
+	Same as with model lifecycle from Oumi.
+	And application lifecycle.
+
+2) **DeepEvals update**:
+Focusing on DeepEvals tests, using a schema first approach for evaluation. 
+Not ready to share yet, as still need to evolve it further.
+Key topics for judge model, which should:
+- evaluate the functional / process flow steps and their outcome. The same process flow is given to the model under test
+- check the output schema validity and compliance
+- validate if business rules given to model under test are reflected in the outputs. Metrics need to include the rules
+Will also need to compare with Oumi's approach for model lifecycle (baselining - evals etc.).
+<img width="821" height="311" alt="Screenshot 2026-07-29 174037" src="https://github.com/user-attachments/assets/e4d2c159-d009-4bd4-9789-fd8bbf3dae02" />
+<img width="928" height="601" alt="Screenshot 2026-07-29 171951" src="https://github.com/user-attachments/assets/7db91526-5bf5-4c3a-b1a6-b0e53646f0e3" />
+<img width="846" height="687" alt="Screenshot 2026-07-29 171244" src="https://github.com/user-attachments/assets/8b99b60a-e97a-4033-8791-583bc172dbbf" />
+
+---------------------------------
 Here I am outlining briefly, certain aspects of LLM lifecycle, with focus on data synthesis and model evals.
 Note: generating training data becomes possible, after baselining. 
 
