@@ -1,3 +1,31 @@
+For Shopping assistant, there is a need to define detailed measures for their main deliverables (design, agent - model, harness to assess their fit for Delta.
+Evaluating fine-tuned model needs to start with functional baselining of the overall shopping orchestration (not only routing). 
+
+Worked on model orchestration task for product discovery in the past month and elaborated in the past few days. 
+My working hypothesis is that the model involves 5-6 agents:
+* Parser
+- parses shopping queries 
+- extracts critical product slots in structured format
+- identifies product intent abandonment correctly, reasons about it, drops old product slots and keeps relevant ones (offers for merchant with cashback), all within the same intent of product discovery
+* Product discovery
+knows when it does not have information to make a product search
+* Merchant search
+* Offer search
+* Product catalogue search
+* Shopping assistant planner 
+- outputs a plan which can be executed by another component (Shopping assistant Controller
+- it is different than Controller, as it only outputs an execution plan and it does not execute it.
+The benefit for this separation between plan extraction and execution is that it allows the 2 components to run in parallel, evolve designs separately, be more maintainable.
+As I understand the orchestration sequence flow functionally, the above aims to cover it completely.
+
+Proved the above flow with out-of-the-box Gemma 4 E4B and prompt engineering (screenshots attached).
+
+Mentioning these here, as it is difficult in meetings to get these points across.
+We are evolving these jointly over the next few months. 
+It is going to take me few weeks to mature this and present.
+
+
+------------------------------------------------------------
 1) Design lifecycle: inference engines selection criteria considerations:
 		1 — Model Format Compatibility; (GGUF / QAT-GGUF native support)
 		2 — iOS Platform Integration (Device compatibility, App store compliance, Background execution support) 
