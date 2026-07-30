@@ -6,6 +6,7 @@ My working hypothesis is that the model involves 5-6 agents:
 * Parser
 - parses shopping queries 
 - extracts critical product slots in structured format
+- identifies repeated questions for existing slots
 - identifies product intent abandonment correctly, reasons about it, drops old product slots and keeps relevant ones (offers for merchant with cashback), all within the same intent of product discovery
 * Product discovery
 knows when it does not have information to make a product search
@@ -21,8 +22,16 @@ As I understand the orchestration sequence flow functionally, the above aims to 
 Proved the above flow with out-of-the-box Gemma 4 E4B and prompt engineering (screenshots attached).
 
 Mentioning these here, as it is difficult in meetings to get these points across.
-We are evolving these jointly over the next few months. 
-It is going to take me few weeks to mature this and present.
+We are evolving these jointly over the next few months. It is going to take few weeks to mature this and present.
+This is DoD I am focusing on, while Oumi works on their initial proposal. Expecting the equivalent DoD from them when ready.
+<img width="582" height="612" alt="img1" src="https://github.com/user-attachments/assets/a4a5d712-9f1b-4b12-a5c4-1cd9efd322f9" />
+<img width="552" height="577" alt="img2" src="https://github.com/user-attachments/assets/ca1981e8-e384-416a-aa8c-4ba6a1e9060f" />
+<img width="533" height="558" alt="img3" src="https://github.com/user-attachments/assets/ee79d8a4-9382-4aba-b63a-6676b9667640" />
+<img width="545" height="588" alt="img4" src="https://github.com/user-attachments/assets/436dd4e4-01dc-44b5-9ebd-5eab897d9560" />
+<img width="536" height="601" alt="img5" src="https://github.com/user-attachments/assets/aeaca3c2-bf44-4be3-a1b3-ae6346b3ea8d" />
+<img width="543" height="705" alt="img6" src="https://github.com/user-attachments/assets/31f46a93-1c85-4cc6-9aeb-54c536502826" />
+<img width="555" height="648" alt="img7" src="https://github.com/user-attachments/assets/b2d89447-f6d8-431e-87c3-00ea7a36145d" />
+
 
 
 ------------------------------------------------------------
