@@ -6,8 +6,8 @@ My working hypothesis is that the model involves 5-6 agents:
 * Parser
 - parses shopping queries 
 - extracts critical product slots in structured format
-- identifies repeated questions for existing slots
-- identifies product intent abandonment correctly, reasons about it, drops old product slots and keeps relevant ones (offers for merchant with cashback), all within the same intent of product discovery
+- identifies repeated questions for existing slots (see img6)
+- identifies product intent abandonment correctly, reasons about it, drops old product slots and keeps relevant ones (offers for merchant with cashback), all within the same intent of product discovery (see img7)
 * Product discovery
 knows when it does not have information to make a product search
 * Merchant search
@@ -24,6 +24,7 @@ Proved the above flow with out-of-the-box Gemma 4 E4B and prompt engineering (sc
 Mentioning these here, as it is difficult in meetings to get these points across.
 We are evolving these jointly over the next few months. It is going to take few weeks to mature this and present.
 This is DoD I am focusing on, while Oumi works on their initial proposal. Expecting the equivalent DoD from them when ready.
+
 <img width="582" height="612" alt="img1" src="https://github.com/user-attachments/assets/a4a5d712-9f1b-4b12-a5c4-1cd9efd322f9" />
 <img width="552" height="577" alt="img2" src="https://github.com/user-attachments/assets/ca1981e8-e384-416a-aa8c-4ba6a1e9060f" />
 <img width="533" height="558" alt="img3" src="https://github.com/user-attachments/assets/ee79d8a4-9382-4aba-b63a-6676b9667640" />
