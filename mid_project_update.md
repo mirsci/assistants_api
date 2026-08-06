@@ -88,3 +88,9 @@ Wil be working hard to improve this and will follow up with a staged approach:
 - Workstream 2 foundational work underway with initial Gemma 4 success
 - Knowledge currently embedded in AI-assisted workflow
 - Next: structured roadmap and team synchronization in 2-3 week cycles
+
+## Appendix
+<img width="812" height="706" alt="image" src="https://github.com/user-attachments/assets/a688fff6-3e13-49a0-a8c7-34f929d1c29b" />
+<img width="820" height="762" alt="image" src="https://github.com/user-attachments/assets/3b4ef61b-0ae7-4b5c-aa56-764f0bd2b595" />
+<img width="833" height="743" alt="image" src="https://github.com/user-attachments/assets/45068add-d2c5-4d5b-b7c5-4ecfc6ce6918" />
+
