@@ -94,3 +94,7 @@ Wil be working hard to improve this and will follow up with a staged approach:
 <img width="820" height="762" alt="image" src="https://github.com/user-attachments/assets/3b4ef61b-0ae7-4b5c-aa56-764f0bd2b595" />
 <img width="833" height="743" alt="image" src="https://github.com/user-attachments/assets/45068add-d2c5-4d5b-b7c5-4ecfc6ce6918" />
 
+Evals
+<img width="823" height="752" alt="image" src="https://github.com/user-attachments/assets/0fdddfaa-a0a6-457c-8c75-5d587b564e90" />
+
+
